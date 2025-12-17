@@ -9,9 +9,9 @@ from linebot.exceptions import LineBotApiError
 import voluptuous as vol
 
 from homeassistant import config_entries
+from homeassistant.config_entries import ConfigFlow, ConfigFlowResult
 from homeassistant.const import CONF_ACCESS_TOKEN, CONF_ACTION, CONF_NAME
 from homeassistant.core import HomeAssistant
-from homeassistant.data_entry_flow import FlowResult
 import homeassistant.helpers.config_validation as cv
 from homeassistant.helpers.selector import (
     SelectOptionDict,
@@ -54,14 +54,14 @@ async def validate_input(hass: HomeAssistant, data: dict[str, Any]) -> None:
     await get_quota(hass, access_token)
 
 
-class ConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
+class LineBotConfigFlow(ConfigFlow, domain=DOMAIN):
     """Handle a config flow for OpenAI Conversation."""
 
     VERSION = 1
 
     async def async_step_user(
         self, user_input: dict[str, Any] | None = None
-    ) -> FlowResult:
+    ) -> ConfigFlowResult:
         """Handle the initial step."""
         if user_input is None:
             return self.async_show_form(
@@ -88,20 +88,15 @@ class ConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
         config_entry: config_entries.ConfigEntry,
     ) -> config_entries.OptionsFlow:
         """Create the options flow."""
-        return LineBotOptionsFlow(config_entry)
+        return LineBotOptionsFlow()
 
 
 class LineBotOptionsFlow(config_entries.OptionsFlow):
     """OpenAI config flow options handler."""
 
-    def __init__(self, config_entry: config_entries.ConfigEntry) -> None:
-        """Initialize options flow."""
-        self.config_entry = config_entry
-        self.selected_chat = None
-
     async def async_step_init(
         self, user_input: dict[str, Any] | None = None
-    ) -> FlowResult:
+    ) -> ConfigFlowResult:
         """Manage the options."""
         if user_input is not None:
             if user_input.get(CONF_ACTION) == "add_chat":
@@ -116,7 +111,7 @@ class LineBotOptionsFlow(config_entries.OptionsFlow):
 
     async def async_step_add_chat(
         self, user_input: dict[str, Any] | None = None
-    ) -> FlowResult:
+    ) -> ConfigFlowResult:
         """Add a chat."""
         self.selected_chat = None
         errors = {}
@@ -148,7 +143,7 @@ class LineBotOptionsFlow(config_entries.OptionsFlow):
 
     async def async_step_configure_chat(
         self, user_input: dict[str, Any] | None = None
-    ) -> FlowResult:
+    ) -> ConfigFlowResult:
         """Configure a chat."""
         chat_id = self.selected_chat
         if user_input.get(CONF_NAME) is not None:
@@ -173,7 +168,7 @@ class LineBotOptionsFlow(config_entries.OptionsFlow):
 
     async def async_step_remove_chat(
         self, user_input: dict[str, Any] | None = None
-    ) -> FlowResult:
+    ) -> ConfigFlowResult:
         """Remove a chat."""
         if user_input is not None:
             new_data = self.config_entry.data.copy()
