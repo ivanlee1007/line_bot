@@ -57,7 +57,7 @@ data:
 | **to** | no | string | name of chat ID from `allowed_chat_ids` in `configuration.yaml` file to push message.
 | **reply_token** | no | string | reply_token received from webhook [event](https://developers.line.biz/en/reference/messaging-api/#message-event) to reply message.
 | **message** | yes | [Message](https://developers.line.biz/en/reference/messaging-api/#message-objects) | eg. [Text message](https://developers.line.biz/en/reference/messaging-api/#text-message), [Image message](https://developers.line.biz/en/reference/messaging-api/#image-message),[Template message](https://developers.line.biz/en/reference/messaging-api/#template-messages), etc...
-#### example
+#### Example 1. [Text Message](https://developers.line.biz/en/reference/messaging-api/#text-message)
 ![a1](https://user-images.githubusercontent.com/2917984/69494729-580fc080-0f02-11ea-8231-6d0dde9bae14.png)
 ```yaml
 service: line_bot.send_message
@@ -66,6 +66,34 @@ data:
   message:
     type: text
     text: "Hello World!"
+```
+
+#### Example 2. [Image Message](https://developers.line.biz/en/reference/messaging-api/#image-message)
+
+<img width="300" height="178" src="https://github.com/user-attachments/assets/df60bdca-be60-45fc-b355-b994ccec1496" />
+
+```yaml
+action: line_bot.send_message
+data:
+  to: me
+  message:
+    type: image
+    originalContentUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/d/dd/Gfp-wisconsin-madison-the-nature-boardwalk.jpg/2560px-Gfp-wisconsin-madison-the-nature-boardwalk.jpg"
+    previewImageUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/d/dd/Gfp-wisconsin-madison-the-nature-boardwalk.jpg/2560px-Gfp-wisconsin-madison-the-nature-boardwalk.jpg"
+```
+
+#### Example 3. [Location Message](https://developers.line.biz/en/reference/messaging-api/#location-message)
+
+<img width="301" height="98" src="https://github.com/user-attachments/assets/1d3dd88c-3bf8-4e4a-9ee5-516ab6fc720b" />
+
+```yaml
+action: line_bot.send_message
+data:
+  to: me
+  message:
+    type: image
+    originalContentUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/d/dd/Gfp-wisconsin-madison-the-nature-boardwalk.jpg/2560px-Gfp-wisconsin-madison-the-nature-boardwalk.jpg"
+    previewImageUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/d/dd/Gfp-wisconsin-madison-the-nature-boardwalk.jpg/2560px-Gfp-wisconsin-madison-the-nature-boardwalk.jpg"
 ```
 
 ### line_bot.send_button_message
