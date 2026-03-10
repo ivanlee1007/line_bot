@@ -1,6 +1,13 @@
 # Line Bot
 Home Assistant custom component for notifying message via Line Messaging API (https://developers.line.biz/en/docs/messaging-api/overview/)
 
+## What's new in 0.0.4
+- Added direct `chat_id` support for `line_bot.send_message`
+- Added direct `chat_id` support for `line_bot.send_button_message`
+- Added direct `chat_id` support for `line_bot.send_confirm_message`
+- Exposed `chat_id` in `services.yaml` so Home Assistant service UI/schema can show the field
+- Existing alias-based `to` usage remains supported
+
 ## Usage
 ```
 service: line_bot.send_message
