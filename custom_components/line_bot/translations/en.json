@@ -14,6 +14,12 @@
         }
     },
     "options": {
+        "error": {
+            "choose_one_source": "Choose either a New Message entry or manual alias/chat_id input, not both.",
+            "no_chat_selected": "Select a New Message entry or manually enter both alias and chat_id.",
+            "manual_fields_required": "Manual mode requires both alias and chat_id.",
+            "alias_exists": "This alias already exists."
+        },
         "step": {
             "init": {
                 "title": "Line Bot Configuration",
@@ -24,9 +30,11 @@
             },
             "add_chat": {
                 "title": "Add a chat",
-                "description": "Select a chat_id from new messages (if not visible, send a message to the bot first)",
+                "description": "Select a chat from New Messages, or manually enter an alias and chat_id.",
                 "data": {
-                    "new_messages": "New Messages"
+                    "new_messages": "New Messages",
+                    "name": "Alias",
+                    "chat_id": "Chat ID"
                 }
             },
             "configure_chat": {

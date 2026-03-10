@@ -116,9 +116,35 @@ class LineBotOptionsFlow(config_entries.OptionsFlow):
         self.selected_chat = None
         errors = {}
         if user_input is not None:
-            if user_input.get(CONF_NEW_MESSAGES) is not None:
-                self.selected_chat = user_input[CONF_NEW_MESSAGES]
+            alias = (user_input.get(CONF_NAME) or "").strip()
+            manual_chat_id = (user_input.get(CONF_CHAT_ID) or "").strip()
+            selected_new_message = user_input.get(CONF_NEW_MESSAGES)
+
+            using_manual = bool(alias or manual_chat_id)
+            using_selector = selected_new_message not in (None, "")
+
+            if using_manual and using_selector:
+                errors["base"] = "choose_one_source"
+            elif using_manual:
+                if not alias or not manual_chat_id:
+                    errors["base"] = "manual_fields_required"
+                elif alias in self.config_entry.data.get(CONF_ALLOWED_CHAT_IDS, {}):
+                    errors["base"] = "alias_exists"
+                else:
+                    new_data = self.config_entry.data.copy()
+                    allowed_chat_ids = new_data.get(CONF_ALLOWED_CHAT_IDS, {}).copy()
+                    allowed_chat_ids.update({alias: {CONF_CHAT_ID: manual_chat_id}})
+                    new_data[CONF_ALLOWED_CHAT_IDS] = allowed_chat_ids
+                    self.hass.config_entries.async_update_entry(
+                        self.config_entry,
+                        data=new_data,
+                    )
+                    return self.async_create_entry(title="", data={})
+            elif using_selector:
+                self.selected_chat = selected_new_message
                 return await self.async_step_configure_chat(user_input)
+            else:
+                errors["base"] = "no_chat_selected"
 
         new_messages = self.get_new_messages()
         return self.async_show_form(
@@ -126,7 +152,7 @@ class LineBotOptionsFlow(config_entries.OptionsFlow):
             errors=errors,
             data_schema=vol.Schema(
                 {
-                    vol.Required(CONF_NEW_MESSAGES): SelectSelector(
+                    vol.Optional(CONF_NEW_MESSAGES): SelectSelector(
                         SelectSelectorConfig(
                             options=[
                                 SelectOptionDict(
@@ -135,8 +161,12 @@ class LineBotOptionsFlow(config_entries.OptionsFlow):
                                 )
                                 for key, value in new_messages.items()
                             ],
+                            custom_value=False,
+                            multiple=False,
                         )
                     ),
+                    vol.Optional(CONF_NAME): str,
+                    vol.Optional(CONF_CHAT_ID): str,
                 }
             ),
         )
@@ -146,23 +176,27 @@ class LineBotOptionsFlow(config_entries.OptionsFlow):
     ) -> ConfigFlowResult:
         """Configure a chat."""
         chat_id = self.selected_chat
-        if user_input.get(CONF_NAME) is not None:
-            new_data = self.config_entry.data.copy()
-            allowed_chat_ids = new_data.get(CONF_ALLOWED_CHAT_IDS, {}).copy()
-            allowed_chat_ids.update(
-                {user_input.get(CONF_NAME): {CONF_CHAT_ID: chat_id}}
-            )
-            new_data[CONF_ALLOWED_CHAT_IDS] = allowed_chat_ids
+        errors = {}
+        if user_input is not None and user_input.get(CONF_NAME) is not None:
+            alias = user_input.get(CONF_NAME).strip()
+            if alias in self.config_entry.data.get(CONF_ALLOWED_CHAT_IDS, {}):
+                errors["base"] = "alias_exists"
+            else:
+                new_data = self.config_entry.data.copy()
+                allowed_chat_ids = new_data.get(CONF_ALLOWED_CHAT_IDS, {}).copy()
+                allowed_chat_ids.update({alias: {CONF_CHAT_ID: chat_id}})
+                new_data[CONF_ALLOWED_CHAT_IDS] = allowed_chat_ids
 
-            self.get_new_messages().pop(chat_id)
-            self.hass.config_entries.async_update_entry(
-                self.config_entry,
-                data=new_data,
-            )
-            return self.async_create_entry(title="", data={})
+                self.get_new_messages().pop(chat_id)
+                self.hass.config_entries.async_update_entry(
+                    self.config_entry,
+                    data=new_data,
+                )
+                return self.async_create_entry(title="", data={})
 
         return self.async_show_form(
             step_id="configure_chat",
+            errors=errors,
             data_schema=vol.Schema({vol.Required(CONF_NAME): str}),
         )
 

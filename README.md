@@ -1,6 +1,12 @@
 # Line Bot
 Home Assistant custom component for notifying message via Line Messaging API (https://developers.line.biz/en/docs/messaging-api/overview/)
 
+## What's new in 0.0.5
+- Added manual alias + `chat_id` entry in the Add a chat UI
+- You can now register chats without waiting for webhook-discovered New Messages
+- Existing New Messages selection flow remains supported
+- Added validation for duplicate alias and mixed manual/selector input
+
 ## What's new in 0.0.4
 - Added direct `chat_id` support for `line_bot.send_message`
 - Added direct `chat_id` support for `line_bot.send_button_message`
