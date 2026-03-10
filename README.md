@@ -7,6 +7,24 @@ Home Assistant custom component for notifying message via Line Messaging API (ht
 - Existing New Messages selection flow remains supported
 - Added validation for duplicate alias and mixed manual/selector input
 
+### How to get a `user_id` or `group_id` manually
+If you do not want to rely on the built-in New Messages discovery flow, you can obtain a LINE `user_id` or `group_id` externally and enter it manually.
+
+One practical method is to use <https://webhook.site/> as a temporary webhook receiver:
+
+1. Create a temporary URL at `webhook.site`.
+2. Set that URL as your LINE Messaging API webhook URL.
+3. Send a message to the bot (for a direct chat) or send a message in the group where the bot is present.
+4. Inspect the webhook payload captured by `webhook.site`.
+5. Copy the value from:
+   - `events[0].source.userId` for a direct chat
+   - `events[0].source.groupId` for a group chat
+6. Open the Line Bot integration UI, choose **Add a chat**, and manually enter:
+   - **Alias**: any friendly name you want
+   - **Chat ID**: the copied `userId` or `groupId`
+
+This allows you to register a chat without waiting for the integration to discover it from stored New Messages.
+
 ## What's new in 0.0.4
 - Added direct `chat_id` support for `line_bot.send_message`
 - Added direct `chat_id` support for `line_bot.send_button_message`

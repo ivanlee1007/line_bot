@@ -30,7 +30,7 @@
             },
             "add_chat": {
                 "title": "Add a chat",
-                "description": "Select a chat from New Messages, or manually enter an alias and chat_id.",
+                "description": "Select a chat from New Messages, or manually enter an alias and chat_id. You can also obtain a user_id or group_id externally (for example via webhook.site) and paste it here.",
                 "data": {
                     "new_messages": "New Messages",
                     "name": "Alias",
