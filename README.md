@@ -11,6 +11,17 @@ data:
     text: "Hello World!"
 ```
 
+Or send directly to a raw LINE chat id without pre-registering an alias:
+
+```yaml
+service: line_bot.send_message
+data:
+  chat_id: "C0bd3f7f1963a78c479b9170a238cbf6f"
+  message:
+    type: text
+    text: "Hello Group!"
+```
+
 ## Prequisite
 - Created a channel from Line Console.
     - Follow instructions from the [link](https://developers.line.biz/en/docs/messaging-api/getting-started/) to create a new channel.
@@ -55,6 +66,7 @@ data:
 | service data attribute | required | dataType | description
 | --- | --- | --- | ---
 | **to** | no | string | name of chat ID from `allowed_chat_ids` in `configuration.yaml` file to push message.
+| **chat_id** | no | string | raw LINE user/group/room id to push message directly without pre-registering an alias.
 | **reply_token** | no | string | reply_token received from webhook [event](https://developers.line.biz/en/reference/messaging-api/#message-event) to reply message.
 | **message** | yes | [Message](https://developers.line.biz/en/reference/messaging-api/#message-objects) | eg. [Text message](https://developers.line.biz/en/reference/messaging-api/#text-message), [Image message](https://developers.line.biz/en/reference/messaging-api/#image-message),[Template message](https://developers.line.biz/en/reference/messaging-api/#template-messages), etc...
 #### Example 1. [Text Message](https://developers.line.biz/en/reference/messaging-api/#text-message)
@@ -66,6 +78,16 @@ data:
   message:
     type: text
     text: "Hello World!"
+```
+
+#### Example 1b. [Text Message by raw chat_id](https://developers.line.biz/en/reference/messaging-api/#text-message)
+```yaml
+service: line_bot.send_message
+data:
+  chat_id: "C0bd3f7f1963a78c479b9170a238cbf6f"
+  message:
+    type: text
+    text: "Hello Group!"
 ```
 
 #### Example 2. [Image Message](https://developers.line.biz/en/reference/messaging-api/#image-message)
@@ -101,6 +123,7 @@ data:
 | service data attribute | required | dataType | description
 | --- | --- | --- | ---
 | **to** | no | string | name of chat ID from `allowed_chat_ids` in `configuration.yaml` file to push message.
+| **chat_id** | no | string | raw LINE user/group/room id to push message directly without pre-registering an alias.
 | **reply_token** | no | string | reply_token received from webhook [event](https://developers.line.biz/en/reference/messaging-api/#message-event) to reply message.
 | **buttons** | yes | list | a list of [Actions](https://developers.line.biz/en/reference/messaging-api/#action-objects) (max: 4)
 #### example
@@ -127,6 +150,7 @@ data:
 | service data attribute | required | dataType | description
 | --- | --- | --- | ---
 | **to** | no | string | name of chat ID from `allowed_chat_ids` in `configuration.yaml` file to push message.
+| **chat_id** | no | string | raw LINE user/group/room id to push message directly without pre-registering an alias.
 | **reply_token** | no | string | reply_token received from webhook [event](https://developers.line.biz/en/reference/messaging-api/#message-event) to reply message.
 | **buttons** | yes | list | a list of [Actions](https://developers.line.biz/en/reference/messaging-api/#action-objects) (max: 2)
 #### example

@@ -64,18 +64,21 @@ async def async_setup_services(hass: HomeAssistant, config: ConfigType) -> None:
     async def send_message(call: ServiceCall) -> ServiceResponse:
         """Send a message."""
         to = call.data.get("to")
+        chat_id = call.data.get("chat_id")
         reply_token = call.data.get("reply_token")
         message = call.data.get("message")
         message_type = message.get("type")
         return await line_notification_service.send_message(
             MESSAGES[message_type].new_from_json_dict(message),
             to=to,
+            chat_id=chat_id,
             reply_token=reply_token,
         )
 
     async def send_button_message(call: ServiceCall) -> ServiceResponse:
         """Send a button message."""
         to = call.data.get("to")
+        chat_id = call.data.get("chat_id")
         reply_token = call.data.get("reply_token")
         text = call.data.get("text")
         alt_text = call.data.get("alt_text", text)
@@ -84,12 +87,14 @@ async def async_setup_services(hass: HomeAssistant, config: ConfigType) -> None:
         return await line_notification_service.send_message(
             TemplateSendMessage(alt_text=alt_text, template=button_template),
             to=to,
+            chat_id=chat_id,
             reply_token=reply_token,
         )
 
     async def send_confirm_message(call: ServiceCall) -> ServiceResponse:
         """Send a confirm message."""
         to = call.data.get("to")
+        chat_id = call.data.get("chat_id")
         reply_token = call.data.get("reply_token")
         text = call.data.get("text")
         alt_text = call.data.get("altText", text)
@@ -98,6 +103,7 @@ async def async_setup_services(hass: HomeAssistant, config: ConfigType) -> None:
         return await line_notification_service.send_message(
             TemplateSendMessage(alt_text=alt_text, template=confirm_template),
             to=to,
+            chat_id=chat_id,
             reply_token=reply_token,
         )
 
@@ -131,6 +137,13 @@ class LineNotificationService:
             return await self.hass.loop.run_in_executor(
                 None,
                 partial(self.get_line_bot_api().reply_message, reply_token, message),
+            )
+
+        chat_id = kwargs.get("chat_id")
+        if chat_id:
+            return await self.hass.loop.run_in_executor(
+                None,
+                partial(self.get_line_bot_api().push_message, chat_id, message),
             )
 
         to = self.get_allowed_chat_ids().get(kwargs.get("to"), {}).get(CONF_CHAT_ID)
