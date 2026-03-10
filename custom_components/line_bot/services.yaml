@@ -7,6 +7,12 @@ send_message:
       required: false
       selector:
         text:
+    chat_id:
+      description: Raw LINE user/group/room id to send the notification to directly.
+      example: C0bd3f7f1963a78c479b9170a238cbf6f
+      required: false
+      selector:
+        text:
     reply_token:
       description: Reply token retrieved from webhook.
       required: false
@@ -24,6 +30,12 @@ send_button_message:
     to:
       description: A pre-authorized name of allowed_chat_ids to send the notification to.
       example: me
+      required: false
+      selector:
+        text:
+    chat_id:
+      description: Raw LINE user/group/room id to send the notification to directly.
+      example: C0bd3f7f1963a78c479b9170a238cbf6f
       required: false
       selector:
         text:
@@ -51,6 +63,12 @@ send_confirm_message:
     to:
       description: A pre-authorized name of allowed_chat_ids to send the notification to.
       example: me
+      required: false
+      selector:
+        text:
+    chat_id:
+      description: Raw LINE user/group/room id to send the notification to directly.
+      example: C0bd3f7f1963a78c479b9170a238cbf6f
       required: false
       selector:
         text:
