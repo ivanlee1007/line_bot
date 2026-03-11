@@ -4,6 +4,7 @@ Home Assistant custom component for notifying message via Line Messaging API (ht
 ## Unreleased
 - Added public HA sensor `sensor.line_bot_alias_registry` for browsing registered aliases in UI without exposing raw `chat_id`
 - Keeps detailed alias-to-`chat_id` mapping in `line_bot.list_chats` only
+- Unified `send_confirm_message` to prefer `alt_text` while remaining backward compatible with legacy `altText`
 
 ## What's new in 0.0.7
 - Updated repo links and Home Assistant metadata to point to this fork (`ivanlee1007/line_bot`)

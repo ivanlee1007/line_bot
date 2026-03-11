@@ -83,6 +83,12 @@ send_confirm_message:
       required: true
       selector:
         text:
+    alt_text:
+      description: Alternative text shown on clients that do not render the template.
+      example: Are you sure?
+      required: false
+      selector:
+        text:
     buttons:
       description: "A list of Actions Object (max: 2)"
       example: '[{"text": "Yes", "data": "action=buy&itemid=111"}, {"text": "No"}]'
