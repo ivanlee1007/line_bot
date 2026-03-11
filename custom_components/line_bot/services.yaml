@@ -1,5 +1,5 @@
 send_message:
-  description: Send a notification. (https://github.com/jekalmin/line-bot#example)
+  description: Send a notification. (https://github.com/ivanlee1007/line_bot#example)
   fields:
     to:
       description: A pre-authorized name of allowed_chat_ids to send the notification to.
@@ -25,7 +25,7 @@ send_message:
       selector:
         object:
 send_button_message:
-  description: Send a button notification. (https://github.com/jekalmin/line-bot#example-1)
+  description: Send a button notification. (https://github.com/ivanlee1007/line_bot#example-1)
   fields:
     to:
       description: A pre-authorized name of allowed_chat_ids to send the notification to.
@@ -58,7 +58,7 @@ send_button_message:
       selector:
         object:
 send_confirm_message:
-  description: Send a confirm notification. (https://github.com/jekalmin/line-bot#example-1)
+  description: Send a confirm notification. (https://github.com/ivanlee1007/line_bot#example-1)
   fields:
     to:
       description: A pre-authorized name of allowed_chat_ids to send the notification to.

@@ -1,6 +1,10 @@
 # Line Bot
 Home Assistant custom component for notifying message via Line Messaging API (https://developers.line.biz/en/docs/messaging-api/overview/)
 
+## What's new in 0.0.7
+- Updated repo links and Home Assistant metadata to point to this fork (`ivanlee1007/line_bot`)
+- Prevents docs / HACS helper links from sending users to the old upstream repo
+
 ## What's new in 0.0.6
 - Added `line_bot.list_chats` service so users can see the currently registered alias list
 - Service response can include alias only, or alias + raw `chat_id`
@@ -66,7 +70,7 @@ data:
 
 1. Install via custom component of HACS.
 
-   [![Open your Home Assistant instance and open a repository inside the Home Assistant Community Store.](https://my.home-assistant.io/badges/hacs_repository.svg)](https://my.home-assistant.io/redirect/hacs_repository/?owner=jekalmin&repository=line_bot&category=integration)
+   [![Open your Home Assistant instance and open a repository inside the Home Assistant Community Store.](https://my.home-assistant.io/badges/hacs_repository.svg)](https://my.home-assistant.io/redirect/hacs_repository/?owner=ivanlee1007&repository=line_bot&category=integration)
 2. Go to https://developers.line.biz/console
 3. Retrieve "Channel access token" and "Channel secret" from Line Console
 
@@ -95,7 +99,7 @@ data:
     --|--|--
     <img width="442" src="https://github.com/user-attachments/assets/63ddeb48-6248-4488-813a-429b8f993a85" /> | <img width="400" src="https://github.com/user-attachments/assets/20475b4b-c2d1-4ee2-bc8a-0ede595f7da7" /> | <img width="400" src="https://github.com/user-attachments/assets/f581c3c7-139a-44ec-8707-5badc4c00f4b" />
 
-10. Try [examples](https://github.com/jekalmin/HASS-line-bot/tree/master/examples)
+10. Try [examples](https://github.com/ivanlee1007/line_bot/tree/master/examples)
 
 ## Services
 ### line_bot.send_message

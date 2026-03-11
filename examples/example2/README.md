@@ -4,7 +4,7 @@
 ![2](https://user-images.githubusercontent.com/2917984/69898612-09997080-139f-11ea-81cd-78f56e92b690.png)
 
 ## Prequisite
-Assume you have successfully [configured](https://github.com/jekalmin/HASS-line-bot#installation) line bot webhook
+Assume you have successfully [configured](https://github.com/ivanlee1007/line_bot#installation) line bot webhook
 ## Configuration
 1.  Add a following automation in your automations.yaml
 
