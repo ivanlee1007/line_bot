@@ -21,7 +21,7 @@ from linebot.models import (
 import voluptuous as vol
 
 from homeassistant.const import CONF_ACCESS_TOKEN
-from homeassistant.core import HomeAssistant, ServiceCall, ServiceResponse
+from homeassistant.core import HomeAssistant, ServiceCall, ServiceResponse, SupportsResponse
 from homeassistant.helpers import config_validation as cv, selector
 from homeassistant.helpers.typing import ConfigType
 
@@ -107,9 +107,20 @@ async def async_setup_services(hass: HomeAssistant, config: ConfigType) -> None:
             reply_token=reply_token,
         )
 
+    async def list_chats(call: ServiceCall) -> ServiceResponse:
+        """List registered chat aliases and chat ids."""
+        include_chat_id = call.data.get("include_chat_id", True)
+        return await line_notification_service.list_chats(include_chat_id=include_chat_id)
+
     hass.services.async_register(DOMAIN, "send_message", send_message)
     hass.services.async_register(DOMAIN, "send_button_message", send_button_message)
     hass.services.async_register(DOMAIN, "send_confirm_message", send_confirm_message)
+    hass.services.async_register(
+        DOMAIN,
+        "list_chats",
+        list_chats,
+        supports_response=SupportsResponse.ONLY,
+    )
     return True
 
 
@@ -153,6 +164,29 @@ class LineNotificationService:
             None,
             partial(self.get_line_bot_api().push_message, to, message),
         )
+
+    async def list_chats(self, include_chat_id: bool = True):
+        """List registered chats."""
+        allowed_chat_ids = self.get_allowed_chat_ids()
+        chats = []
+
+        for alias in sorted(allowed_chat_ids):
+            chat = {"alias": alias}
+            chat_id = allowed_chat_ids.get(alias, {}).get(CONF_CHAT_ID)
+            if include_chat_id:
+                chat[CONF_CHAT_ID] = chat_id
+            chats.append(chat)
+
+        response = {
+            "count": len(chats),
+            "aliases": [chat["alias"] for chat in chats],
+            "chats": chats,
+        }
+        if include_chat_id:
+            response["mapping"] = {
+                chat["alias"]: chat.get(CONF_CHAT_ID) for chat in chats
+            }
+        return response
 
 
 def to_actions(buttons):

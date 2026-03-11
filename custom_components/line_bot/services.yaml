@@ -90,3 +90,13 @@ send_confirm_message:
       required: true
       selector:
         object:
+list_chats:
+  description: List currently registered chat aliases in the integration, optionally including raw chat_id values.
+  fields:
+    include_chat_id:
+      description: Include raw LINE user/group/room ids in the response.
+      example: true
+      default: true
+      required: false
+      selector:
+        boolean:

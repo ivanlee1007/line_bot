@@ -1,6 +1,11 @@
 # Line Bot
 Home Assistant custom component for notifying message via Line Messaging API (https://developers.line.biz/en/docs/messaging-api/overview/)
 
+## What's new in 0.0.6
+- Added `line_bot.list_chats` service so users can see the currently registered alias list
+- Service response can include alias only, or alias + raw `chat_id`
+- Makes it easier to discover valid `to:` targets before using notification automations
+
 ## What's new in 0.0.5
 - Added manual alias + `chat_id` entry in the Add a chat UI
 - You can now register chats without waiting for webhook-discovered New Messages
@@ -197,6 +202,47 @@ data:
       data: action=buy&itemid=111 # equivalent to {"label" : "Yes", "data" : "action=buy&itemid=111 "}
     # MessageAction
     - text: No # equivalent to {"text" : "No", "label" : "No"}
+```
+
+### line_bot.list_chats
+
+Returns the currently registered alias list from the integration.
+
+| service data attribute | required | dataType | description
+| --- | --- | --- | ---
+| **include_chat_id** | no | boolean | include raw LINE user/group/room ids in the response. default: `true` |
+
+#### Example: list alias + chat_id
+```yaml
+action: line_bot.list_chats
+data:
+  include_chat_id: true
+response_variable: line_bot_chats
+```
+
+Example response:
+```yaml
+line_bot_chats:
+  count: 2
+  aliases:
+    - me
+    - blueberry
+  chats:
+    - alias: me
+      chat_id: Uxxxxxxxx
+    - alias: blueberry
+      chat_id: Cxxxxxxxx
+  mapping:
+    me: Uxxxxxxxx
+    blueberry: Cxxxxxxxx
+```
+
+#### Example: alias only
+```yaml
+action: line_bot.list_chats
+data:
+  include_chat_id: false
+response_variable: line_bot_chats
 ```
 
 ## Events
