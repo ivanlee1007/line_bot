@@ -225,6 +225,32 @@ Public alias registry sensor for Home Assistant UI.
 This sensor intentionally does **not** expose raw LINE `chat_id` values.
 Use `line_bot.list_chats` when you need the detailed mapping for debugging or maintenance.
 
+#### Lovelace example
+You can display the public alias list directly in Lovelace with a Markdown card:
+
+```yaml
+type: markdown
+content: >
+  {% set aliases = state_attr('sensor.line_bot_alias_registry', 'aliases') or [] %}
+  **LINE aliases ({{ aliases | count }})**
+  {% if aliases %}
+  {% for alias in aliases %}
+  - {{ alias }}
+  {% endfor %}
+  {% else %}
+  _No aliases registered._
+  {% endif %}
+```
+
+Or show the sensor itself with an Entities card:
+
+```yaml
+type: entities
+title: Line Bot Aliases
+entities:
+  - entity: sensor.line_bot_alias_registry
+```
+
 ### line_bot.list_chats
 
 Returns the currently registered alias list from the integration.
