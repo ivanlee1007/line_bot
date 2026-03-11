@@ -1,6 +1,9 @@
 """Constants for the Line Bot."""
 
 DOMAIN = "line_bot"
+PLATFORMS = ["sensor"]
+
+SIGNAL_ALIAS_REGISTRY_UPDATED = "line_bot_alias_registry_updated"
 
 CONF_ACTION_ADD_CHAT = "add_chat"
 CONF_ACTION_REMOVE_CHAT = "remove_chat"

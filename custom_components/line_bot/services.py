@@ -27,7 +27,7 @@ from homeassistant.helpers.typing import ConfigType
 
 from .const import CONF_ALLOWED_CHAT_IDS, CONF_CHAT_ID, DOMAIN
 from .exceptions import ChatIdNotFound
-from .helpers import get_config_entry
+from .helpers import get_config_entry, get_detailed_alias_registry
 
 QUERY_IMAGE_SCHEMA = vol.Schema(
     {
@@ -97,7 +97,7 @@ async def async_setup_services(hass: HomeAssistant, config: ConfigType) -> None:
         chat_id = call.data.get("chat_id")
         reply_token = call.data.get("reply_token")
         text = call.data.get("text")
-        alt_text = call.data.get("altText", text)
+        alt_text = call.data.get("alt_text", call.data.get("altText", text))
         buttons = call.data.get("buttons")
         confirm_template = ConfirmTemplate(text=text, actions=to_actions(buttons))
         return await line_notification_service.send_message(
@@ -167,26 +167,7 @@ class LineNotificationService:
 
     async def list_chats(self, include_chat_id: bool = True):
         """List registered chats."""
-        allowed_chat_ids = self.get_allowed_chat_ids()
-        chats = []
-
-        for alias in sorted(allowed_chat_ids):
-            chat = {"alias": alias}
-            chat_id = allowed_chat_ids.get(alias, {}).get(CONF_CHAT_ID)
-            if include_chat_id:
-                chat[CONF_CHAT_ID] = chat_id
-            chats.append(chat)
-
-        response = {
-            "count": len(chats),
-            "aliases": [chat["alias"] for chat in chats],
-            "chats": chats,
-        }
-        if include_chat_id:
-            response["mapping"] = {
-                chat["alias"]: chat.get(CONF_CHAT_ID) for chat in chats
-            }
-        return response
+        return get_detailed_alias_registry(self.hass, include_chat_id=include_chat_id)
 
 
 def to_actions(buttons):

@@ -1,6 +1,10 @@
 # Line Bot
 Home Assistant custom component for notifying message via Line Messaging API (https://developers.line.biz/en/docs/messaging-api/overview/)
 
+## Unreleased
+- Added public HA sensor `sensor.line_bot_alias_registry` for browsing registered aliases in UI without exposing raw `chat_id`
+- Keeps detailed alias-to-`chat_id` mapping in `line_bot.list_chats` only
+
 ## What's new in 0.0.7
 - Updated repo links and Home Assistant metadata to point to this fork (`ivanlee1007/line_bot`)
 - Prevents docs / HACS helper links from sending users to the old upstream repo
@@ -207,6 +211,18 @@ data:
     # MessageAction
     - text: No # equivalent to {"text" : "No", "label" : "No"}
 ```
+
+### sensor.line_bot_alias_registry
+
+Public alias registry sensor for Home Assistant UI.
+
+- **state**: number of registered aliases
+- **attributes**:
+  - `aliases`: alias list
+  - `updated_at`: last refresh timestamp
+
+This sensor intentionally does **not** expose raw LINE `chat_id` values.
+Use `line_bot.list_chats` when you need the detailed mapping for debugging or maintenance.
 
 ### line_bot.list_chats
 
