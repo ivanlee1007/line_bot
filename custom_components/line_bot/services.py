@@ -1,6 +1,7 @@
 """Services for the Line Bot integration."""
 
 from functools import partial
+import json
 import logging
 
 from linebot import LineBotApi
@@ -67,6 +68,9 @@ async def async_setup_services(hass: HomeAssistant, config: ConfigType) -> None:
         chat_id = call.data.get("chat_id")
         reply_token = call.data.get("reply_token")
         message = call.data.get("message")
+        # HA script engine may pass message as JSON string instead of dict
+        if isinstance(message, str):
+            message = json.loads(message)
         message_type = message.get("type")
         return await line_notification_service.send_message(
             MESSAGES[message_type].new_from_json_dict(message),
@@ -83,6 +87,8 @@ async def async_setup_services(hass: HomeAssistant, config: ConfigType) -> None:
         text = call.data.get("text")
         alt_text = call.data.get("alt_text", text)
         buttons = call.data.get("buttons")
+        if isinstance(buttons, str):
+            buttons = json.loads(buttons)
         button_template = ButtonsTemplate(text=text, actions=to_actions(buttons))
         return await line_notification_service.send_message(
             TemplateSendMessage(alt_text=alt_text, template=button_template),
